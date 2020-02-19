@@ -1,3 +1,5 @@
+import { stringify } from "querystring";
+
 // Super Simple Unit Functions
 
 export const add = (a: number, b: number) => {
@@ -8,6 +10,11 @@ export const divide = (a: number, b: number) => {
     if(b === 0) { throw new Error('div by 0') }
 
     return a / b;
+    }
+
+export const concat = (a: string, b: string) => {
+    if (a.length == 0 || b.length == 0) { throw new Error("String cannot be empty") }
+    return a.concat(b);
     }
 
 // @TODO try creating a method "concat" to concatenate two strings

@@ -3,6 +3,8 @@ import bodyParser from 'body-parser';
 
 import { Car, cars as cars_list } from './cars';
 
+
+
 (async () => {
   let cars:Car[]  = cars_list;
 
@@ -56,9 +58,7 @@ import { Car, cars as cars_list } from './cars';
   // an application/json body to {{host}}/persons
   app.post( "/persons", 
     async ( req: Request, res: Response ) => {
-
       const { name } = req.body;
-
       if ( !name ) {
         return res.status(400)
                   .send(`name is required`);
@@ -70,13 +70,71 @@ import { Car, cars as cars_list } from './cars';
 
   // @TODO Add an endpoint to GET a list of cars
   // it should be filterable by make with a query paramater
+  app.get( "/cars", 
+    async ( req: Request, res: Response ) => {
+      // let { make } = req.query;
+
+      
+      // let cars_list = cars;
+
+      // // if we have an optional query paramater, filter by it
+      // if (make) {
+      //   cars_list = cars.filter((car) => car.make === make);
+      // }
+      console.log(cars);
+
+      let  { make } = req.query;
+      let cars_list = cars;
+      if ( make ) {
+        console.log("Retreive specific make", make, " in ", cars)
+        cars_list = cars.filter((car) => car.make === make);
+      }
+      return res.status(200)
+                .send(cars_list);
+  } );
 
   // @TODO Add an endpoint to get a specific car
   // it should require id
-  // it should fail gracefully if no matching car is found
+  app.get( "/cars/:id", 
+    ( req: Request, res: Response ) => {
+      const id = +req.params.id;
+      console.log("Retrieve car for id ", id)
+      const car = cars.find(function(car) { return car.id === id }) // id undefined
+      if ( !car) {
+        return res.status(404).send("not found")
+      } else {
+        return res.status(200).send(car);
+      } 
+      
+  } );
 
   /// @TODO Add an endpoint to post a new car to our list
   // it should require id, type, model, and cost
+  app.post( "/cars", 
+    async ( req: Request, res: Response ) => {
+      const make = req.body.make;
+      const type = req.body.type;
+      const model = req.body.model;
+      const cost = +req.body.cost;
+      if ( cost === 0 ) {
+        return res.status(400).send("Cost can not be 0")
+      }
+      const id = +req.body.id;
+      if ( !make || !type || !model || !cost) {
+        return res.status(400)
+          .send(`make, type, model, cost, and id are required`);
+      }
+      let new_car: Car = {
+        make: make,
+        type: type,
+        model: model,
+        cost: cost,
+        id: id,
+      }
+      cars.push(new_car)
+      console.log(cars)
+      return res.status(201).send(new_car)
+  } );
 
   // Start the Server
   app.listen( port, () => {
