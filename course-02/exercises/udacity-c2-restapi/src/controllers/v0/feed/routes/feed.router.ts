@@ -19,7 +19,6 @@ router.get('/', async (req: Request, res: Response) => {
 //@TODO
 //Add an endpoint to GET a specific resource by Primary Key
 router.get('/:id', 
-    requireAuth, 
     async (req: Request, res: Response) => {
         let { id } = req.params;
         const record = await FeedItem.findByPk(id);
@@ -33,7 +32,6 @@ router.get('/:id',
 // update a specific resource
 // only the caption or url may be modified
 router.patch('/:id', 
-    requireAuth, 
     async (req: Request, res: Response) => {
         let { id } = req.params;
         const record = await FeedItem.findByPk(id);
