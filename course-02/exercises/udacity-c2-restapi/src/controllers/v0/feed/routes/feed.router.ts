@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { FeedItem } from '../models/FeedItem';
+import { config } from '../../../../config/config';
 import { requireAuth } from '../../users/routes/auth.router';
 import * as AWS from '../../../../aws';
 
@@ -16,7 +17,6 @@ router.get('/', async (req: Request, res: Response) => {
     res.send(items);
 });
 
-//@TODO
 //Add an endpoint to GET a specific resource by Primary Key
 router.get('/:id', 
     async (req: Request, res: Response) => {
@@ -29,14 +29,37 @@ router.get('/:id',
         }
 });
 
-// update a specific resource
-// only the caption or url may be modified
-router.patch('/:id', 
+// Get the image associated with a feed item
+router.get('/fetchimage/:id', 
+    //requireAuth, 
     async (req: Request, res: Response) => {
         let { id } = req.params;
         const record = await FeedItem.findByPk(id);
         if ( !record ) {
             res.status(400).send("not found");
+            return;
+        }
+        let url = AWS.getGetSignedUrl(record.url);
+        if ( !url ) {
+            res.status(400).send("File " + record.url + " not found.");
+            return;
+        }
+        const encoded = encodeURIComponent(url);
+        const rUrl = config.imageHandler.domain + config.imageHandler.path + '?url='+encoded;
+        console.log("Redirecting to " + rUrl);
+        res.redirect(rUrl);
+});
+
+// update a specific resource
+// only the caption or url may be modified
+router.patch('/:id', 
+    requireAuth, 
+    async (req: Request, res: Response) => {
+        let { id } = req.params;
+        const record = await FeedItem.findByPk(id);
+        if ( !record ) {
+            res.status(400).send("not found");
+            return;
         }
         const caption = req.body.caption;
         const fileName = req.body.url;
