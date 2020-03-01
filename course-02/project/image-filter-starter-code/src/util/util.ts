@@ -1,35 +1,6 @@
 import fs from 'fs';
 import Jimp = require('jimp');
 
-export async function imageExists(url: string): Promise<void> {
-    new Promise(function (resolve, reject) {
-        // Standard XHR to load an image
-        var request = new XMLHttpRequest();
-        request.open('GET', url);
-        request.responseType = 'blob';
-        
-        // When the request loads, check whether it was successful
-        request.onload = function () {
-            if (request.status === 200) {
-                // If successful, resolve the promise by passing back the request response
-                resolve(request.status);
-            } else {
-                // If it fails, reject the promise with a error message
-                reject(new Error('Problem accessing image ' + url + '; error code:' + request.statusText));
-            }
-        };
-      
-        request.onerror = function () {
-            // Also deal with the case when the entire request fails to begin with
-            // This is probably a network error, so reject the promise with an appropriate message
-            reject(new Error('There was a network error.'));
-        };
-      
-        // Send the request
-        request.abort();
-    });
-}
-
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
 // returns the absolute path to the local image
@@ -39,8 +10,6 @@ export async function imageExists(url: string): Promise<void> {
 //    an absolute path to a filtered image locally saved file
 export async function filterImageFromURL(inputURL: string): Promise<string>{
     return new Promise( async resolve => {
-        console.log("CWD ", process.cwd());
-        console.log("__dirname ", __dirname);
         const photo = await Jimp.read(inputURL);
         const outpath = '/tmp/filtered.'+Math.floor(Math.random() * 2000)+'.jpg';
         await photo
