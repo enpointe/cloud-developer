@@ -1,15 +1,16 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { filterImageFromURL, deleteLocalFiles } from './util/util';
+var toJSON = require( 'utils-error-to-json' );
 
 async function imageExists(url: string) {
-  new Promise(function(resolve, reject) {
+  return new Promise(function(resolve, reject) {
     // Standard XHR to load an image
     var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url);
     xhr.responseType = 'blob';
-    xhr.timeout = 2000; // time in milliseconds
+    xhr.timeout = 1000 * 20; // time in milliseconds (20 seconds)
 
     // When the request loads, check whether it was successful
     xhr.onload = function() {
@@ -18,18 +19,18 @@ async function imageExists(url: string) {
         resolve(xhr.response);
       } else {
         // If it fails, reject the promise with a error message
-        console.log('Problem accessing image ' + xhr.statusText);
-        reject(
-          new Error(
-            'Problem accessing image ' + url + '; error code:' + xhr.statusText
-          )
-        );
+        let msg = 'Problem accessing image ' + url;
+        if (xhr.statusText) {
+          msg = msg + '; ' + xhr.statusText;
+        } else {
+          msg = msg + '; error code:' + xhr.status;
+        }
+        reject(new Error(msg));
       }
     };
 
     xhr.onerror = function() {
-      console.log('network error');
-      reject(new Error('Network error.'));
+      reject(new Error('Network error ' + url));
     };
 
     // Send the request
@@ -69,63 +70,40 @@ async function imageExists(url: string) {
       res.status(400).send('missing required parameter: url_image');
       return;
     }
-    console.log('URL ', url);
     try {
-      await imageExists(url)
-    } catch (Error) {
-      res.status(404).send(error);
+      await imageExists(url);
+    } catch (error) {
+      console.log(toJSON(error));
+      res.status(404).send(error.toString());
       return;
     }
-    res.status(200).send("Done");
-    // await imageExists(url).then(
-    //   function(response) {
-    //     console.log('Response', response);
-    //   }
-    // ).catch(function(error) {
-    //   res.status(404).send(error);
-    //   return;
-    // }).then(function(response) { 
-    //   console.log('Image verification completed.');
-    //   res.status(200).send("Done");
-    // });
-    //   let fileName = filterImageFromURL(url).then;
-    //   const options = {
-    //     url: url,
-    //     dotfiles: 'deny',
-    //     headers: {
-    //       'x-timestamp': Date.now(),
-    //       'x-sent': true
-    //     }
-    //   };
-    //   res.sendFile(fileName, options);
-    // })
-    
-
-    // try {
-    //   await imageExists(url)
-    // } catch (err) {
-    //   res.status(404).send(err)
-    // }
-    // let fileName;
-    // try {
-    //   fileName = await filterImageFromURL(url);
-    //   var options = {
-    //     url: url,
-    //     dotfiles: 'deny',
-    //     headers: {
-    //       'x-timestamp': Date.now(),
-    //       'x-sent': true
-    //     }
-    //   }
-    //   res.sendFile(fileName, options);
-    // } catch (err) {
-    //   console.log("ERROR: ", err)
-    // }
-
-    // Clean up
-    // if (!fileName) {
-    //   await deleteLocalFiles([fileName]);
-    // }
+    let fileName: string;
+    try {
+      fileName = await filterImageFromURL(url);
+    } catch (error) {
+      console.log(toJSON(error));
+      res.status(500).send(error.toString());
+    }
+    var options = {
+      url: url,
+      dotfiles: 'deny',
+      headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+      }
+    }
+    res.sendFile(fileName, options, function (error) {
+      if (error) {
+        console.log(toJSON(error));
+      } else {
+        try {
+          deleteLocalFiles([fileName]);
+        } catch(e) {
+          console.log("error removing ", fileName);
+          console.log(toJSON(error));
+        }
+      }
+    });
   });
 
   // Root Endpoint
