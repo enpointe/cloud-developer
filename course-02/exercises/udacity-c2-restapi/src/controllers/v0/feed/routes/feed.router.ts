@@ -33,7 +33,7 @@ router.get('/:id',
 router.get('/fetchimage/:id', 
     //requireAuth, 
     async (req: Request, res: Response) => {
-        let { id } = req.params;
+        let id = req.params.id;
         const record = await FeedItem.findByPk(id);
         if ( !record ) {
             res.status(400).send("not found");
@@ -45,9 +45,9 @@ router.get('/fetchimage/:id',
             return;
         }
         const encoded = encodeURIComponent(url);
-        const rUrl = config.imageHandler.domain + config.imageHandler.path + '?url='+encoded;
-        console.log("Redirecting to " + rUrl);
-        res.redirect(rUrl);
+        const rURL = config.imageHandler.domain + config.imageHandler.path + '?image_url='+encoded;
+        console.log("Redirecting to " + rURL);
+        res.redirect(rURL);
 });
 
 // update a specific resource
