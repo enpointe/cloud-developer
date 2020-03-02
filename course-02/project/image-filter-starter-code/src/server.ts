@@ -67,7 +67,7 @@ async function imageExists(url: string) {
   app.get('/filteredimage/', async (req, res) => {
     let url: string = req.query.image_url;
     if (!url) {
-      res.status(400).send('missing required parameter: url_image');
+      res.status(400).send('missing required parameter: image_url');
       return;
     }
     try {
