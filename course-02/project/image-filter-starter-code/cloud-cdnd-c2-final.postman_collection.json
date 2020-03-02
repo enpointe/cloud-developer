@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4bcf1909-8996-44b7-be35-b130ab03d12f",
+		"_postman_id": "b6fa346c-6b16-469b-b12d-2b710c3c32d8",
 		"name": "cloud-cdnd-c2-final",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{HOST}}/filteredimage?image_url=https://timedotcom.files.wordpress.com/2019/03/kitten-report.jpg",
+					"raw": "http://{{HOST}}/filteredimage?image_url=https://www.aspca.org/sites/default/files/blog_apcc-foster-kitten-safety_060619_main.jpg",
 					"protocol": "http",
 					"host": [
 						"{{HOST}}"
@@ -22,7 +22,79 @@
 					"query": [
 						{
 							"key": "image_url",
-							"value": "https://timedotcom.files.wordpress.com/2019/03/kitten-report.jpg"
+							"value": "https://www.aspca.org/sites/default/files/blog_apcc-foster-kitten-safety_060619_main.jpg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/filteredimage?image_url",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}/filteredimage?image_url=https://d2ieorefj5ilau.cloudfront.net/uploads/production/000/378/074/medium/55ea770e71219f78c5fe404ed6f59b9a.jpg",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"filteredimage"
+					],
+					"query": [
+						{
+							"key": "image_url",
+							"value": "https://d2ieorefj5ilau.cloudfront.net/uploads/production/000/378/074/medium/55ea770e71219f78c5fe404ed6f59b9a.jpg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/filteredimage?image_url NOT FOUND",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}/filteredimage?image_url=https://google.com/host1.jpg",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"filteredimage"
+					],
+					"query": [
+						{
+							"key": "image_url",
+							"value": "https://google.com/host1.jpg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/filteredimage?image_url Network Error",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}/filteredimage?image_url=https://googledadd.com/host1.jpg",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"filteredimage"
+					],
+					"query": [
+						{
+							"key": "image_url",
+							"value": "https://googledadd.com/host1.jpg"
 						}
 					]
 				}
@@ -54,10 +126,11 @@
 	],
 	"variable": [
 		{
-			"id": "1df3d31a-de30-494b-a3d0-f1228dd8713c",
+			"id": "b148569a-c169-4b94-8b84-31bad1e652b0",
 			"key": "HOST",
 			"value": "localhost:8082",
 			"type": "string"
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
