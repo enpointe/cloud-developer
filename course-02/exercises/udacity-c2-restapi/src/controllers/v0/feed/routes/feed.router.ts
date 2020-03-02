@@ -45,7 +45,7 @@ router.get('/fetchimage/:id',
             return;
         }
         const encoded = encodeURIComponent(url);
-        const rUrl = config.imageHandler.domain + config.imageHandler.path + '?url='+encoded;
+        const rUrl = config.imageHandler.domain + config.imageHandler.path + '?image_url='+encoded;
         console.log("Redirecting to " + rUrl);
         res.redirect(rUrl);
 });
