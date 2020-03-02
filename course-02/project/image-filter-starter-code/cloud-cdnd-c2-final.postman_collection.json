@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b6fa346c-6b16-469b-b12d-2b710c3c32d8",
+		"_postman_id": "d83e25c8-451d-404e-aad6-511978418429",
 		"name": "cloud-cdnd-c2-final",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://{{HOST}}/filteredimage?image_url=https://www.aspca.org/sites/default/files/blog_apcc-foster-kitten-safety_060619_main.jpg",
+					"raw": "http://{{HOST}}/filteredimage?image_url=https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/video/caring_for_your_kitten_video/650x350_caring_for_your_kitten_video.jpg",
 					"protocol": "http",
 					"host": [
 						"{{HOST}}"
@@ -22,7 +22,7 @@
 					"query": [
 						{
 							"key": "image_url",
-							"value": "https://www.aspca.org/sites/default/files/blog_apcc-foster-kitten-safety_060619_main.jpg"
+							"value": "https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/video/caring_for_your_kitten_video/650x350_caring_for_your_kitten_video.jpg"
 						}
 					]
 				}
@@ -31,6 +31,21 @@
 		},
 		{
 			"name": "/filteredimage?image_url",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9831a00c-2268-4282-85fb-8047e57b4316",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -54,7 +69,61 @@
 			"response": []
 		},
 		{
+			"name": "/filteredimage?image_url Not Processable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2fae5da8-3c5d-4d6a-a1fb-a78b22a1861e",
+						"exec": [
+							"pm.test(\"Status code is 422\", function () {",
+							"    pm.response.to.have.status(422);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{HOST}}/filteredimage?image_url=https://github.com/enpointe/cloud-developer/tree/master/course-02/project/image-filter-starter-code",
+					"protocol": "http",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"filteredimage"
+					],
+					"query": [
+						{
+							"key": "image_url",
+							"value": "https://github.com/enpointe/cloud-developer/tree/master/course-02/project/image-filter-starter-code"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/filteredimage?image_url NOT FOUND",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "916f0c30-2725-4dc4-9072-ebb40446c209",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -79,6 +148,21 @@
 		},
 		{
 			"name": "/filteredimage?image_url Network Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2150b403-1ff8-4832-b4c7-ec6f7d538cfc",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -126,7 +210,7 @@
 	],
 	"variable": [
 		{
-			"id": "b148569a-c169-4b94-8b84-31bad1e652b0",
+			"id": "2f80c12d-9ad5-4ed7-9d64-90a8f277fc0e",
 			"key": "HOST",
 			"value": "localhost:8082",
 			"type": "string"

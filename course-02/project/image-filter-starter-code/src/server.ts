@@ -8,9 +8,9 @@ async function imageExists(url: string) {
     // Standard XHR to load an image
     var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
     xhr.responseType = 'blob';
     xhr.timeout = 1000 * 20; // time in milliseconds (20 seconds)
+    xhr.open('GET', url);
 
     // When the request loads, check whether it was successful
     xhr.onload = function() {
@@ -28,7 +28,6 @@ async function imageExists(url: string) {
         reject(new Error(msg));
       }
     };
-
     xhr.onerror = function() {
       reject(new Error('Network error ' + url));
     };
@@ -64,12 +63,17 @@ async function imageExists(url: string) {
   //    image_url: URL of a publicly accessible image
   // RETURNS
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
-  app.get('/filteredimage/', async (req, res) => {
+  app.get('/filteredimage/',  async (req, res) => {
     let url: string = req.query.image_url;
     if (!url) {
       res.status(400).send('missing required parameter: image_url');
       return;
     }
+    process.on('unhandledRejection', error => {
+      console.log(toJSON(error));
+      return;
+    });
+    
     try {
       await imageExists(url);
     } catch (error) {
@@ -82,7 +86,8 @@ async function imageExists(url: string) {
       fileName = await filterImageFromURL(url);
     } catch (error) {
       console.log(toJSON(error));
-      res.status(500).send(error.toString());
+      res.status(422).send("Could not projecss image " + url + " Reason: " + error.toString());
+      return;
     }
     var options = {
       url: url,
