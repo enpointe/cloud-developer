@@ -7,17 +7,17 @@ export const config = {
     "dialect": "postgres",
     "aws_region": process.env.AWS_REGION,
     "aws_profile": process.env.AWS_PROFILE,
-    "aws_media_bucket": process.env.AWS_MEDIA_BUCKET,
+    "aws_media_bucket": process.env.AWS_BUCKET,
   },
   "prod": {
     "username": process.env.POSTGRESS_USERNAME,
     "password": process.env.POSTGRESS_PASSWORD,
-    "database": process.env.POSTGRESS_DATABASE,
+    "database": process.env.POSTGRESS_DB,
     "host": process.env.POSTGRESS_HOST,
     "dialect": "postgres",
   },
   "jwt": {
-    "secret": process.env.SECRET_KEY
+    "secret": process.env.JWT_SECRET
   },
   "imageHandler": {
     "domain": process.env.IMAGE_FETCHER_DOMAIN,
