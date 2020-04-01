@@ -208,8 +208,6 @@ resources:
               Principal: '*'
               Action: 
                 - s3:GetObject
-                - s3:GetBucketPolicy
-                - s3:PutBucketPolicy
               Resource: 'arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
          
