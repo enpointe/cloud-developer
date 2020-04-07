@@ -136,7 +136,6 @@ resources:
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.IMAGES_TABLE}
 
-
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
@@ -159,17 +158,13 @@ resources:
     BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
-        Bucket: 
-          Ref: "AttachmentsBucket"
         PolicyDocument:
           Id: MyPolicy
-          Version: '2012-10-17'
+          Version: "2012-10-17"
           Statement:
             - Sid: PublicReadForGetBucketObjects
-              Principal: '*'
-              Action:
-              - s3:GetBucketPolicy
-              - s3:GetObject
-              - s3:PutBucketPolicy
               Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
               Resource: 'arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*'
+        Bucket: !Ref AttachmentsBucket
