@@ -1,9 +1,9 @@
 import { SNSEvent, SNSHandler, S3EventRecord } from 'aws-lambda'
 import 'source-map-support/register'
 import * as AWS from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
 import Jimp from 'jimp/es'
 
+const AWSXRay = require('aws-xray-sdk')
 const XAWS = AWSXRay.captureAWS(AWS)
 
 const s3 = new XAWS.S3()
@@ -37,10 +37,10 @@ async function processImage(record: S3EventRecord) {
   const body = response.Body
   const image = await Jimp.read(body)
 
-  console.log('Resizing image')
+  console.log(`Resizing image key ${key}`)
   image.resize(150, Jimp.AUTO)
   const convertedBuffer = await image.getBufferAsync(Jimp.AUTO)
-
+  console.log(`Buffer ${convertedBuffer}`)
   console.log(`Writing image back to S3 bucket: ${thumbnailBucketName}`)
   await s3
     .putObject({
