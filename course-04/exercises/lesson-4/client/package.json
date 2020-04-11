@@ -14,12 +14,12 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.4.1",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.0",
-    "styled-components": "^4.3.2",
+    "semantic-ui-react": "^0.88.2",
+    "styled-components": "^4.4.1",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@types/styled-components": "^4.1.18",
+    "@types/styled-components": "^5.0.1",
     "fsevents": "^2.1.2"
   },
   "scripts": {
